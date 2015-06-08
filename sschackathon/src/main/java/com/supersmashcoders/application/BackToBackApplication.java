@@ -14,6 +14,5 @@ public class BackToBackApplication extends Application {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(EventsService.class);
         return classes;
-
     }
 }

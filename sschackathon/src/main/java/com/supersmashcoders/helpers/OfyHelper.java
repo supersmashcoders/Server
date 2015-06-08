@@ -20,6 +20,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.googlecode.objectify.ObjectifyService;
+import com.supersmashcoders.entities.EventEntity;
+import com.supersmashcoders.entities.UserEntity;
 import com.supersmashcoders.entities.images.ImageEntity;
 
 /**
@@ -31,6 +33,8 @@ public class OfyHelper implements ServletContextListener {
         // This will be invoked as part of a warmup request, or the first user
         // request if no warmup request was invoked.
         ObjectifyService.register(ImageEntity.class);
+        ObjectifyService.register(UserEntity.class);
+        ObjectifyService.register(EventEntity.class);
     }
 
     public void contextDestroyed(ServletContextEvent event) {

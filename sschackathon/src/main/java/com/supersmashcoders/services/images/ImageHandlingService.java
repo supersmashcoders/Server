@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,19 +19,22 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.images.ImageEntity;
 
-public class ImageHandlingServlet extends HttpServlet {
+public class ImageHandlingService {
 
-    private static final long serialVersionUID = -5311760696187364921L;
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public String getImageURL(String id) {
+
+        String url = "/events/" + id + "/photos";
+        return blobstoreService.createUploadUrl(url);
+    }
+
+    public void getImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         BlobKey blobKey = new BlobKey(req.getParameter("blob-key"));
         blobstoreService.serve(blobKey, res);
     }
 
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public void postImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         List<BlobKey> blobs = blobstoreService.getUploads(req).get("image");
         BlobKey blobKey = blobs.get(0);

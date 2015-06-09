@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.supersmashcoders.entities.images.ImageEntity;
 
 @Entity
@@ -15,6 +16,7 @@ public class EventEntity {
 	private Long id;
 	private String name;
 	private String description;
+	@Index
 	private Date startDate;
 	private Date endDate;
 	private GeoPt geoPoint;

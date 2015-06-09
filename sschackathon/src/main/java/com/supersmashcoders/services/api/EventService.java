@@ -1,51 +1,70 @@
 package com.supersmashcoders.services.api;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.GeoPt;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Query;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.EventEntity;
-import com.supersmashcoders.entities.UserEntity;
-import com.supersmashcoders.entities.images.ImageEntity;
 import com.supersmashcoders.pojos.ResultMessage;
 import com.supersmashcoders.resources.URLResource;
 import com.supersmashcoders.services.images.ImageHandlingService;
 
 /** An endpoint class we are exposing */
-@Api(name = "events", version = "v1", namespace = @ApiNamespace(ownerDomain = "sschackathon.appspot.com", 
-																ownerName = "sschackathon", 
-																packagePath = ""))
+@Api(name = "backtoback", version = "v1",
+	title= "Back To Back API", namespace = @ApiNamespace(	ownerDomain = "sschackathon.appspot.com", 
+															ownerName = "sschackathon", 
+															packagePath = ""))
 public class EventService {
 
     private ImageHandlingService imageService = new ImageHandlingService();
 
-    @ApiMethod(name = "create", httpMethod = HttpMethod.POST)
+    @ApiMethod(name = "create", httpMethod = HttpMethod.POST, path="event")
     public ResultMessage create (EventEntity event) {
     	ObjectifyService.ofy().save().entity(event).now();
     	return new ResultMessage("Success", Long.toString(event.getId()));
     }
     
-    @ApiMethod(name = "getEvent", httpMethod = HttpMethod.GET, path = "{id}")
-    public EventEntity getEvent (@Named("id") String id) throws EntityNotFoundException {
+    @ApiMethod(name = "getEvent", httpMethod = HttpMethod.GET, path = "event/{id}")
+    public EventEntity getEvent (@Named("id") String id) throws NotFoundException {
     	Key key = KeyFactory.createKey("EventEntity", Long.decode(id));
-    	Entity entity = DatastoreServiceFactory.getDatastoreService().get(key);
+    	Entity entity = null;
+		try {
+			entity = DatastoreServiceFactory.getDatastoreService().get(key);
+		} catch (EntityNotFoundException e) {
+			throw new NotFoundException("No event exists with id " + id);
+		}
     	EventEntity event = ObjectifyService.ofy().toPojo(entity);
     	return event;
+    }
+    
+    @ApiMethod(name = "getEvents", httpMethod = HttpMethod.GET, path="events")
+    public List<EventEntity> getEvents () throws NotFoundException {
+    	Query query = new Query("EventEntity").addSort("startDate", Query.SortDirection.DESCENDING);
+    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
+    											.prepare(query)
+    											.asList(FetchOptions.Builder.withDefaults());
+    	System.out.println(entities.size());
+    	List<EventEntity> events = new ArrayList<EventEntity>();
+    	for(Entity entity: entities){
+    		events.add((EventEntity)ObjectifyService.ofy().toPojo(entity));
+    	}
+    	return events;
     }
 
     @ApiMethod(name = "getUrl", path = "images/url", httpMethod = HttpMethod.GET)

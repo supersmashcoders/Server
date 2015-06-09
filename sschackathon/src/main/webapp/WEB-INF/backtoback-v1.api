@@ -2,8 +2,9 @@
   "extends" : "thirdParty.api",
   "abstract" : false,
   "root" : "https://${app.id}.appspot.com/_ah/api",
-  "name" : "events",
+  "name" : "backtoback",
   "version" : "v1",
+  "title" : "Back To Back API",
   "defaultVersion" : false,
   "adapter" : {
     "bns" : "https://${app.id}.appspot.com/_ah/spi",
@@ -26,7 +27,7 @@
   "ownerDomain" : "sschackathon.appspot.com",
   "ownerName" : "sschackathon",
   "methods" : {
-    "events.getImage" : {
+    "backtoback.getImage" : {
       "path" : "images",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
@@ -41,8 +42,8 @@
         "body" : "empty"
       }
     },
-    "events.getEvent" : {
-      "path" : "{id}",
+    "backtoback.getEvent" : {
+      "path" : "event/{id}",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
@@ -62,7 +63,7 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "events.storeImage" : {
+    "backtoback.storeImage" : {
       "path" : "images",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
@@ -77,7 +78,7 @@
         "body" : "empty"
       }
     },
-    "events.getUrl" : {
+    "backtoback.getUrl" : {
       "path" : "images/url",
       "httpMethod" : "GET",
       "authLevel" : "NONE",
@@ -98,8 +99,8 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "events.create" : {
-      "path" : "create",
+    "backtoback.create" : {
+      "path" : "event",
       "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
@@ -109,6 +110,21 @@
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "backtoback.getEvents" : {
+      "path" : "events",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getEvents",
+      "request" : {
+        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -248,6 +264,18 @@
             "type" : "string"
           }
         }
+      },
+      "EventEntityCollection" : {
+        "id" : "EventEntityCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "EventEntity"
+            }
+          }
+        }
       }
     },
     "methods" : {
@@ -271,6 +299,11 @@
         },
         "response" : {
           "$ref" : "ResultMessage"
+        }
+      },
+      "com.supersmashcoders.services.api.EventService.getEvents" : {
+        "response" : {
+          "$ref" : "EventEntityCollection"
         }
       }
     }

@@ -1,10 +1,7 @@
 package com.supersmashcoders.services.api;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletException;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -68,27 +65,12 @@ public class EventService {
     }
 
     @ApiMethod(name = "getUrl", path = "images/url", httpMethod = HttpMethod.GET)
-    public URLResource getURL(@Named("id") String id) {
-        return imageService.getImageURL(id);
+    public URLResource getURL(@Named("eventId") String eventId) {
+        return imageService.getImageURL(eventId);
     }
 
-    @ApiMethod(name = "getImage", path = "images", httpMethod = HttpMethod.GET)
-    public void getImage() {
-        try {
-            imageService.getImage(null, null);
-        } catch (ServletException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    @ApiMethod(name = "storeImage", path = "images", httpMethod = HttpMethod.POST)
-    public void createImage() {
-        try {
-            imageService.postImage(null, null);
-        } catch (ServletException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    @ApiMethod(name = "getImages", path = "images/", httpMethod = HttpMethod.GET)
+    public void getImages(@Named("eventId") String eventId) {
+        imageService.getImagesFromEvent(eventId);
     }
 }

@@ -27,21 +27,6 @@
   "ownerDomain" : "sschackathon.appspot.com",
   "ownerName" : "sschackathon",
   "methods" : {
-    "backtoback.getImage" : {
-      "path" : "images",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImage",
-      "request" : {
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "backtoback.getEvent" : {
       "path" : "event/{id}",
       "httpMethod" : "GET",
@@ -63,15 +48,21 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "backtoback.storeImage" : {
-      "path" : "images",
-      "httpMethod" : "POST",
+    "backtoback.getImages" : {
+      "path" : "images/",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.createImage",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImages",
       "request" : {
+        "parameters" : {
+          "eventId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
         "body" : "empty"
       },
       "response" : {
@@ -88,7 +79,7 @@
       "rosyMethod" : "com.supersmashcoders.services.api.EventService.getURL",
       "request" : {
         "parameters" : {
-          "id" : {
+          "eventId" : {
             "type" : "string",
             "required" : true
           }
@@ -279,14 +270,12 @@
       }
     },
     "methods" : {
-      "com.supersmashcoders.services.api.EventService.getImage" : {
-      },
       "com.supersmashcoders.services.api.EventService.getEvent" : {
         "response" : {
           "$ref" : "EventEntity"
         }
       },
-      "com.supersmashcoders.services.api.EventService.createImage" : {
+      "com.supersmashcoders.services.api.EventService.getImages" : {
       },
       "com.supersmashcoders.services.api.EventService.getURL" : {
         "response" : {

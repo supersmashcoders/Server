@@ -26,6 +26,21 @@
   "ownerDomain" : "sschackathon.appspot.com",
   "ownerName" : "sschackathon",
   "methods" : {
+    "events.getImage" : {
+      "path" : "images",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImage",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
     "events.getEvent" : {
       "path" : "{id}",
       "httpMethod" : "GET",
@@ -33,7 +48,43 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventsService.getEvent",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getEvent",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "events.storeImage" : {
+      "path" : "images",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.createImage",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "events.getUrl" : {
+      "path" : "images/url",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getURL",
       "request" : {
         "parameters" : {
           "id" : {
@@ -54,7 +105,7 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventsService.create",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.create",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
@@ -177,6 +228,15 @@
           }
         }
       },
+      "URLResource" : {
+        "id" : "URLResource",
+        "type" : "object",
+        "properties" : {
+          "postURL" : {
+            "type" : "string"
+          }
+        }
+      },
       "ResultMessage" : {
         "id" : "ResultMessage",
         "type" : "object",
@@ -191,12 +251,21 @@
       }
     },
     "methods" : {
-      "com.supersmashcoders.services.api.EventsService.getEvent" : {
+      "com.supersmashcoders.services.api.EventService.getImage" : {
+      },
+      "com.supersmashcoders.services.api.EventService.getEvent" : {
         "response" : {
           "$ref" : "EventEntity"
         }
       },
-      "com.supersmashcoders.services.api.EventsService.create" : {
+      "com.supersmashcoders.services.api.EventService.createImage" : {
+      },
+      "com.supersmashcoders.services.api.EventService.getURL" : {
+        "response" : {
+          "$ref" : "URLResource"
+        }
+      },
+      "com.supersmashcoders.services.api.EventService.create" : {
         "request" : {
           "$ref" : "EventEntity"
         },

@@ -8,11 +8,6 @@ import com.supersmashcoders.entities.EventEntity;
 import com.supersmashcoders.entities.UserEntity;
 
 /** An endpoint class we are exposing */
-@Api(name = "events",
-     version = "v1",
-     namespace = @ApiNamespace(ownerDomain = "sschackathon.appspot.com",
-                                ownerName = "sschackathon",
-                                packagePath=""))
 public class EventService {
 
 	/** Ping the service */

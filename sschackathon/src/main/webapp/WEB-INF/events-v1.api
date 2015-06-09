@@ -26,6 +26,27 @@
   "ownerDomain" : "sschackathon.appspot.com",
   "ownerName" : "sschackathon",
   "methods" : {
+    "events.getEvent" : {
+      "path" : "{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventsService.getEvent",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "events.create" : {
       "path" : "create",
       "httpMethod" : "POST",
@@ -33,25 +54,10 @@
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.create",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventsService.create",
       "request" : {
         "body" : "autoTemplate(backendRequest)",
         "bodyName" : "resource"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "events.ping" : {
-      "path" : "ping",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.ping",
-      "request" : {
-        "body" : "empty"
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
@@ -170,20 +176,32 @@
             "type" : "string"
           }
         }
+      },
+      "ResultMessage" : {
+        "id" : "ResultMessage",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
       }
     },
     "methods" : {
-      "com.supersmashcoders.services.api.EventService.create" : {
-        "request" : {
-          "$ref" : "EventEntity"
-        },
+      "com.supersmashcoders.services.api.EventsService.getEvent" : {
         "response" : {
           "$ref" : "EventEntity"
         }
       },
-      "com.supersmashcoders.services.api.EventService.ping" : {
+      "com.supersmashcoders.services.api.EventsService.create" : {
+        "request" : {
+          "$ref" : "EventEntity"
+        },
         "response" : {
-          "$ref" : "UserEntity"
+          "$ref" : "ResultMessage"
         }
       }
     }

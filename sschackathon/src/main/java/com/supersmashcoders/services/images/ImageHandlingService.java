@@ -18,15 +18,16 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.images.ImageEntity;
+import com.supersmashcoders.resources.URLResource;
 
 public class ImageHandlingService {
 
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-    public String getImageURL(String id) {
+    public URLResource getImageURL(String id) {
 
         String url = "/events/" + id + "/photos";
-        return blobstoreService.createUploadUrl(url);
+        return new URLResource(blobstoreService.createUploadUrl(url));
     }
 
     public void getImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

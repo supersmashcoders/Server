@@ -1,7 +1,6 @@
 package com.supersmashcoders.services.images;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -26,16 +25,15 @@ public class ImageHandlingService {
 
     public URLResource getImageURL(String id) {
 
-        String url = "/events/" + id + "/photos";
+        String url = "/photos?" + id;
         return new URLResource(blobstoreService.createUploadUrl(url));
     }
 
-    public void getImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        BlobKey blobKey = new BlobKey(req.getParameter("blob-key"));
-        blobstoreService.serve(blobKey, res);
+    public void getImagesFromEvent(String eventId) {
+
     }
 
-    public void postImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public JSONObject postImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         List<BlobKey> blobs = blobstoreService.getUploads(req).get("image");
         BlobKey blobKey = blobs.get(0);
@@ -62,11 +60,6 @@ public class ImageHandlingService {
         entity.setServingURL(servingUrl);
 
         ObjectifyService.ofy().save().entity(entity).now();
-
-        PrintWriter out = res.getWriter();
-        out.print(json.toString());
-        out.flush();
-        out.close();
-
+        return json;
     }
 }

@@ -18,12 +18,10 @@ public class ImageHandlingServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
         JSONObject json = imageService.postImage(req, res);
         PrintWriter out = res.getWriter();
         out.print(json.toString());
         out.flush();
         out.close();
-
     }
 }

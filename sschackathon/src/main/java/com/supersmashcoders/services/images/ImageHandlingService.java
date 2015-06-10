@@ -25,7 +25,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.images.ImageEntity;
-import com.supersmashcoders.resources.URLResource;
+import com.supersmashcoders.pojos.URLResource;
 
 public class ImageHandlingService {
 

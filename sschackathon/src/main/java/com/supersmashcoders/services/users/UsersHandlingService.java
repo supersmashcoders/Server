@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.api.server.spi.config.Named;
 import com.google.api.server.spi.response.NotFoundException;
+import com.google.api.server.spi.response.ConflictException;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
@@ -14,12 +15,24 @@ import com.supersmashcoders.pojos.ResultMessage;
 
 public class UsersHandlingService {
 	
-    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions){
+    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException{
 		UserEntity user;
 		
-        user = new UserEntity(username, password, bio, passions);
-        
-        ObjectifyService.ofy().save().entity(user).now();
+		
+    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username);
+    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
+    											.prepare(query)
+    											.asList(FetchOptions.Builder.withDefaults());
+    	System.out.println(entities.size());
+    	
+    	if (entities.size() == 0){
+    		user = new UserEntity(username, password, bio, passions);
+    		ObjectifyService.ofy().save().entity(user).now();
+    	}
+    	else {
+    		throw new ConflictException("Username " + username + " already exists!");
+    	}
+    	
         return new ResultMessage("Success", Long.toString(user.getId()));
     }
     

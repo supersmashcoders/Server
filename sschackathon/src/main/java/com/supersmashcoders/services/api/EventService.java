@@ -7,6 +7,7 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.config.Named;
+import com.google.api.server.spi.response.ConflictException;
 import com.google.api.server.spi.response.NotFoundException;
 import com.supersmashcoders.entities.EventEntity;
 import com.supersmashcoders.entities.UserEntity;
@@ -57,7 +58,7 @@ public class EventService {
     }
     
     @ApiMethod(name = "createUser", path = "users/createUser", httpMethod = HttpMethod.POST)
-    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions){
+    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException{
 		return userService.createUser(username, password, bio, passions);
     }
     

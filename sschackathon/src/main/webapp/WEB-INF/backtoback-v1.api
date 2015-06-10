@@ -82,7 +82,7 @@
         "body" : "empty"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "backtoback.getUser" : {
@@ -140,6 +140,56 @@
       },
       "response" : {
         "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "backtoback.removeAttendance" : {
+      "path" : "event/unAttend",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.removeAttendance",
+      "request" : {
+        "parameters" : {
+          "eventId" : {
+            "type" : "string",
+            "required" : true
+          },
+          "userId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "backtoback.attendEvent" : {
+      "path" : "event/attend",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.attendEvent",
+      "request" : {
+        "parameters" : {
+          "eventId" : {
+            "type" : "string",
+            "required" : true
+          },
+          "userId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
       }
     },
     "backtoback.createUser" : {
@@ -256,7 +306,7 @@
           "photos" : {
             "type" : "array",
             "items" : {
-              "$ref" : "ImageEntity"
+              "type" : "string"
             }
           }
         }
@@ -300,6 +350,18 @@
           }
         }
       },
+      "ResultMessage" : {
+        "id" : "ResultMessage",
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "value" : {
+            "type" : "string"
+          }
+        }
+      },
       "ImageEntity" : {
         "id" : "ImageEntity",
         "type" : "object",
@@ -311,7 +373,7 @@
             "type" : "string"
           },
           "eventId" : {
-            "type" : "integer"
+            "type" : "string"
           }
         }
       },
@@ -324,15 +386,15 @@
           }
         }
       },
-      "ResultMessage" : {
-        "id" : "ResultMessage",
+      "ImageEntityCollection" : {
+        "id" : "ImageEntityCollection",
         "type" : "object",
         "properties" : {
-          "key" : {
-            "type" : "string"
-          },
-          "value" : {
-            "type" : "string"
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "ImageEntity"
+            }
           }
         }
       },
@@ -364,6 +426,9 @@
         }
       },
       "com.supersmashcoders.services.api.EventService.getImages" : {
+        "response" : {
+          "$ref" : "ImageEntityCollection"
+        }
       },
       "com.supersmashcoders.services.api.EventService.getUser" : {
         "response" : {
@@ -379,6 +444,10 @@
         "response" : {
           "$ref" : "EventEntity"
         }
+      },
+      "com.supersmashcoders.services.api.EventService.removeAttendance" : {
+      },
+      "com.supersmashcoders.services.api.EventService.attendEvent" : {
       },
       "com.supersmashcoders.services.api.EventService.createUser" : {
         "response" : {

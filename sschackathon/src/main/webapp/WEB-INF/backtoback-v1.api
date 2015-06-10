@@ -48,25 +48,20 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "backtoback.getImages" : {
-      "path" : "images/",
-      "httpMethod" : "GET",
+    "backtoback.createEvent" : {
+      "path" : "event",
+      "httpMethod" : "POST",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImages",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.createEvent",
       "request" : {
-        "parameters" : {
-          "eventId" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
+        "body" : "autoTemplate(backendRequest)",
+        "bodyName" : "resource"
       },
       "response" : {
-        "body" : "empty"
+        "body" : "autoTemplate(backendResponse)"
       }
     },
     "backtoback.getUrl" : {
@@ -90,20 +85,25 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
-    "backtoback.create" : {
-      "path" : "event",
-      "httpMethod" : "POST",
+    "backtoback.getImages" : {
+      "path" : "images/",
+      "httpMethod" : "GET",
       "authLevel" : "NONE",
       "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
       "audiences" : [ ],
       "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.create",
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImages",
       "request" : {
-        "body" : "autoTemplate(backendRequest)",
-        "bodyName" : "resource"
+        "parameters" : {
+          "eventId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
       },
       "response" : {
-        "body" : "autoTemplate(backendResponse)"
+        "body" : "empty"
       }
     },
     "backtoback.getEvents" : {
@@ -167,7 +167,7 @@
           "photos" : {
             "type" : "array",
             "items" : {
-              "$ref" : "ImageEntity"
+              "type" : "string"
             }
           }
         }
@@ -211,47 +211,11 @@
           }
         }
       },
-      "ImageEntity" : {
-        "id" : "ImageEntity",
-        "type" : "object",
-        "properties" : {
-          "blobKey" : {
-            "$ref" : "BlobKey"
-          },
-          "servingURL" : {
-            "type" : "string"
-          },
-          "eventId" : {
-            "type" : "integer"
-          }
-        }
-      },
-      "BlobKey" : {
-        "id" : "BlobKey",
-        "type" : "object",
-        "properties" : {
-          "keyString" : {
-            "type" : "string"
-          }
-        }
-      },
       "URLResource" : {
         "id" : "URLResource",
         "type" : "object",
         "properties" : {
           "postURL" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ResultMessage" : {
-        "id" : "ResultMessage",
-        "type" : "object",
-        "properties" : {
-          "key" : {
-            "type" : "string"
-          },
-          "value" : {
             "type" : "string"
           }
         }
@@ -275,20 +239,20 @@
           "$ref" : "EventEntity"
         }
       },
-      "com.supersmashcoders.services.api.EventService.getImages" : {
+      "com.supersmashcoders.services.api.EventService.createEvent" : {
+        "request" : {
+          "$ref" : "EventEntity"
+        },
+        "response" : {
+          "$ref" : "EventEntity"
+        }
       },
       "com.supersmashcoders.services.api.EventService.getURL" : {
         "response" : {
           "$ref" : "URLResource"
         }
       },
-      "com.supersmashcoders.services.api.EventService.create" : {
-        "request" : {
-          "$ref" : "EventEntity"
-        },
-        "response" : {
-          "$ref" : "ResultMessage"
-        }
+      "com.supersmashcoders.services.api.EventService.getImages" : {
       },
       "com.supersmashcoders.services.api.EventService.getEvents" : {
         "response" : {

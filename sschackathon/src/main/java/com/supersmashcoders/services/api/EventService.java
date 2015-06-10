@@ -18,7 +18,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.EventEntity;
-import com.supersmashcoders.pojos.ResultMessage;
 import com.supersmashcoders.resources.URLResource;
 import com.supersmashcoders.services.images.ImageHandlingService;
 
@@ -31,23 +30,22 @@ public class EventService {
 
     private ImageHandlingService imageService = new ImageHandlingService();
 
-    @ApiMethod(name = "create", httpMethod = HttpMethod.POST, path="event")
-    public ResultMessage create (EventEntity event) {
+    @ApiMethod(name = "createEvent", httpMethod = HttpMethod.POST, path="event")
+    public EventEntity createEvent (EventEntity event) {
     	ObjectifyService.ofy().save().entity(event).now();
-    	return new ResultMessage("Success", Long.toString(event.getId()));
+    	return event;
     }
     
     @ApiMethod(name = "getEvent", httpMethod = HttpMethod.GET, path = "event/{id}")
     public EventEntity getEvent (@Named("id") String id) throws NotFoundException {
-    	Key key = KeyFactory.createKey("EventEntity", Long.decode(id));
-    	Entity entity = null;
 		try {
-			entity = DatastoreServiceFactory.getDatastoreService().get(key);
+			Key key = KeyFactory.createKey("EventEntity", Long.decode(id));
+	    	Entity entity = DatastoreServiceFactory.getDatastoreService().get(key);
+			EventEntity event = ObjectifyService.ofy().toPojo(entity);
+	    	return event;
 		} catch (EntityNotFoundException e) {
 			throw new NotFoundException("No event exists with id " + id);
 		}
-    	EventEntity event = ObjectifyService.ofy().toPojo(entity);
-    	return event;
     }
     
     @ApiMethod(name = "getEvents", httpMethod = HttpMethod.GET, path="events")

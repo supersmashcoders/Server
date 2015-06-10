@@ -1,5 +1,6 @@
 package com.supersmashcoders.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class EventEntity {
 	private UserEntity owner;
 	private List<String> tags;
 	private List<UserEntity> attendants;
-	private List<ImageEntity> photos;
+	private List<String> photos;
+	
+	public EventEntity() {
+		tags = new ArrayList<String>();
+		attendants = new ArrayList<UserEntity>();
+		photos = new ArrayList<String>();
+	}
 	
 	public Long getId() {
 		return id;
@@ -79,10 +86,10 @@ public class EventEntity {
 	public void setAttendants(List<UserEntity> attendants) {
 		this.attendants = attendants;
 	}
-	public List<ImageEntity> getPhotos() {
+	public List<String> getPhotos() {
 		return photos;
 	}
-	public void setPhotos(List<ImageEntity> photos) {
+	public void setPhotos(List<String> photos) {
 		this.photos = photos;
 	}
 }

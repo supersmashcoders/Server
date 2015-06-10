@@ -27,48 +27,6 @@
   "ownerDomain" : "sschackathon.appspot.com",
   "ownerName" : "sschackathon",
   "methods" : {
-    "backtoback.getEvent" : {
-      "path" : "event/{id}",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getEvent",
-      "request" : {
-        "parameters" : {
-          "id" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "autoTemplate(backendResponse)"
-      }
-    },
-    "backtoback.getImages" : {
-      "path" : "images/",
-      "httpMethod" : "GET",
-      "authLevel" : "NONE",
-      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
-      "audiences" : [ ],
-      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
-      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImages",
-      "request" : {
-        "parameters" : {
-          "eventId" : {
-            "type" : "string",
-            "required" : true
-          }
-        },
-        "body" : "empty"
-      },
-      "response" : {
-        "body" : "empty"
-      }
-    },
     "backtoback.getUrl" : {
       "path" : "images/url",
       "httpMethod" : "GET",
@@ -106,6 +64,48 @@
         "body" : "autoTemplate(backendResponse)"
       }
     },
+    "backtoback.getImages" : {
+      "path" : "images/",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getImages",
+      "request" : {
+        "parameters" : {
+          "eventId" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "backtoback.getUser" : {
+      "path" : "users/getUser",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getUser",
+      "request" : {
+        "parameters" : {
+          "username" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
     "backtoback.getEvents" : {
       "path" : "events",
       "httpMethod" : "GET",
@@ -120,10 +120,99 @@
       "response" : {
         "body" : "autoTemplate(backendResponse)"
       }
+    },
+    "backtoback.getEvent" : {
+      "path" : "event/{id}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.getEvent",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "backtoback.createUser" : {
+      "path" : "users/createUser",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.createUser",
+      "request" : {
+        "parameters" : {
+          "username" : {
+            "type" : "string",
+            "required" : true
+          },
+          "password" : {
+            "type" : "string",
+            "required" : true
+          },
+          "bio" : {
+            "type" : "string",
+            "required" : true
+          },
+          "passions" : {
+            "repeated" : true,
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "backtoback.validateUser" : {
+      "path" : "users/validateUser",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.supersmashcoders.services.api.EventService.validateUser",
+      "request" : {
+        "parameters" : {
+          "username" : {
+            "type" : "string",
+            "required" : true
+          },
+          "password" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
     }
   },
   "descriptor" : {
     "schemas" : {
+      "URLResource" : {
+        "id" : "URLResource",
+        "type" : "object",
+        "properties" : {
+          "postURL" : {
+            "type" : "string"
+          }
+        }
+      },
       "EventEntity" : {
         "id" : "EventEntity",
         "type" : "object",
@@ -235,15 +324,6 @@
           }
         }
       },
-      "URLResource" : {
-        "id" : "URLResource",
-        "type" : "object",
-        "properties" : {
-          "postURL" : {
-            "type" : "string"
-          }
-        }
-      },
       "ResultMessage" : {
         "id" : "ResultMessage",
         "type" : "object",
@@ -270,13 +350,6 @@
       }
     },
     "methods" : {
-      "com.supersmashcoders.services.api.EventService.getEvent" : {
-        "response" : {
-          "$ref" : "EventEntity"
-        }
-      },
-      "com.supersmashcoders.services.api.EventService.getImages" : {
-      },
       "com.supersmashcoders.services.api.EventService.getURL" : {
         "response" : {
           "$ref" : "URLResource"
@@ -290,9 +363,31 @@
           "$ref" : "ResultMessage"
         }
       },
+      "com.supersmashcoders.services.api.EventService.getImages" : {
+      },
+      "com.supersmashcoders.services.api.EventService.getUser" : {
+        "response" : {
+          "$ref" : "UserEntity"
+        }
+      },
       "com.supersmashcoders.services.api.EventService.getEvents" : {
         "response" : {
           "$ref" : "EventEntityCollection"
+        }
+      },
+      "com.supersmashcoders.services.api.EventService.getEvent" : {
+        "response" : {
+          "$ref" : "EventEntity"
+        }
+      },
+      "com.supersmashcoders.services.api.EventService.createUser" : {
+        "response" : {
+          "$ref" : "ResultMessage"
+        }
+      },
+      "com.supersmashcoders.services.api.EventService.validateUser" : {
+        "response" : {
+          "$ref" : "ResultMessage"
         }
       }
     }

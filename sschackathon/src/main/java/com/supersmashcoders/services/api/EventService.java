@@ -18,6 +18,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.EventEntity;
+import com.supersmashcoders.entities.UserEntity;
 import com.supersmashcoders.pojos.ResultMessage;
 import com.supersmashcoders.resources.URLResource;
 import com.supersmashcoders.services.images.ImageHandlingService;
@@ -73,4 +74,53 @@ public class EventService {
     public void getImages(@Named("eventId") String eventId) {
         imageService.getImagesFromEvent(eventId);
     }
+    
+    @ApiMethod(name = "createUser", path = "users/createUser", httpMethod = HttpMethod.POST)
+    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions){
+		UserEntity user;
+		
+        user = new UserEntity(username, password, bio, passions);
+        
+        ObjectifyService.ofy().save().entity(user).now();
+        return new ResultMessage("Success", Long.toString(user.getId()));
+    }
+    
+    @ApiMethod(name = "validateUser", path = "users/validateUser", httpMethod = HttpMethod.POST)
+    public ResultMessage validateUser (@Named("username") String username, @Named("password") String password) throws NotFoundException{
+    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username)
+    			.addFilter("password", Query.FilterOperator.EQUAL, password);
+    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
+    											.prepare(query)
+    											.asList(FetchOptions.Builder.withDefaults());
+    	System.out.println(entities.size());
+    	
+    	UserEntity user = null;
+    	if (entities.size() == 1){
+    		user = (UserEntity)ObjectifyService.ofy().toPojo(entities.get(0));
+    	}
+    	else {
+    		throw new NotFoundException("No user/password combination exists with username " + username);
+    	}
+    	return new ResultMessage("Success", Long.toString(user.getId()));
+    }
+    
+    @ApiMethod(name = "getUser", path = "users/getUser", httpMethod = HttpMethod.POST)
+    public UserEntity getUser (@Named("username") String username) throws NotFoundException{
+    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username);
+    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
+    											.prepare(query)
+    											.asList(FetchOptions.Builder.withDefaults());
+    	System.out.println(entities.size());
+    	UserEntity user;
+    	if (entities.size() == 1){
+    		user = (UserEntity)ObjectifyService.ofy().toPojo(entities.get(0));
+    		user.setPassword("");
+    	}
+    	else {
+    		throw new NotFoundException("No user exists with username " + username);
+    	}
+    	return user;
+    	
+    }
+    
 }

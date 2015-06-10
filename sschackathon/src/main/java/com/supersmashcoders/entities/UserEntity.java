@@ -15,6 +15,7 @@ public class UserEntity {
 	private Long id;
 	@Index
 	private String username;
+	@Index
 	private String password;
 	private String bio;
 	private List<String> passions;
@@ -49,13 +50,13 @@ public class UserEntity {
 	public String getUsername() {
 		return username;
 	}
-	public UserEntity (String username, String password, String bio) {
+	public UserEntity (String username, String password, String bio, List<String> passions) {
 		this.username = username;
 		this.password = password;
 		this.bio = bio;
+		this.passions = passions;
 	}
 	public UserEntity (){
 		
 	}
-	
 }

@@ -3,6 +3,7 @@ package com.supersmashcoders.entities.images;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class ImageEntity {
@@ -10,7 +11,8 @@ public class ImageEntity {
     private Long id;
     private BlobKey blobKey;
     private String servingURL;
-    private Integer eventId;
+    @Index
+    private String eventId;
 
     public BlobKey getBlobKey() {
         return blobKey;
@@ -28,11 +30,11 @@ public class ImageEntity {
         this.servingURL = servingURL;
     }
 
-    public Integer getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(Integer eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 

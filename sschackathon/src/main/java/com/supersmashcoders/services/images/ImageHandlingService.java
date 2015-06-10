@@ -1,6 +1,7 @@
 package com.supersmashcoders.services.images;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,6 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
@@ -17,7 +25,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.images.ImageEntity;
-import com.supersmashcoders.resources.URLResource;
+import com.supersmashcoders.pojos.URLResource;
 
 public class ImageHandlingService {
 
@@ -25,12 +33,20 @@ public class ImageHandlingService {
 
     public URLResource getImageURL(String id) {
 
-        String url = "/photos?" + id;
+        String url = "/images?eventId=" + id;
         return new URLResource(blobstoreService.createUploadUrl(url));
     }
 
-    public void getImagesFromEvent(String eventId) {
-
+    public List<ImageEntity> getImagesFromEvent(String eventId) {
+        Filter eventIdFilter = new FilterPredicate("eventId", FilterOperator.EQUAL, eventId);
+        Query query = new Query("ImageEntity").setFilter(eventIdFilter);
+        List<Entity> entities = DatastoreServiceFactory.getDatastoreService().prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
+        List<ImageEntity> images = new ArrayList<ImageEntity>();
+        for (Entity entity : entities) {
+            images.add((ImageEntity) ObjectifyService.ofy().toPojo(entity));
+        }
+        return images;
     }
 
     public JSONObject postImage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -55,7 +71,7 @@ public class ImageHandlingService {
         }
 
         ImageEntity entity = new ImageEntity();
-        entity.setEventId(0);
+        entity.setEventId((String) req.getParameter("eventId"));
         entity.setBlobKey(blobKey);
         entity.setServingURL(servingUrl);
 

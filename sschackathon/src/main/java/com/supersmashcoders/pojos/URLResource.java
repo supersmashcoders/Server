@@ -1,4 +1,4 @@
-package com.supersmashcoders.resources;
+package com.supersmashcoders.pojos;
 
 public class URLResource {
 

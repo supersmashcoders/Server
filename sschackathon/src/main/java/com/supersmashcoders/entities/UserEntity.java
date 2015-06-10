@@ -5,6 +5,7 @@ import java.util.List;
 import com.googlecode.objectify.annotation.Embed;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 @Embed
@@ -12,6 +13,7 @@ public class UserEntity {
 	
 	@Id
 	private Long id;
+	@Index
 	private String username;
 	private String password;
 	private String bio;
@@ -47,4 +49,13 @@ public class UserEntity {
 	public String getUsername() {
 		return username;
 	}
+	public UserEntity (String username, String password, String bio) {
+		this.username = username;
+		this.password = password;
+		this.bio = bio;
+	}
+	public UserEntity (){
+		
+	}
+	
 }

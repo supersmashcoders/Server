@@ -52,30 +52,31 @@ public class EventService {
         return imageService.getImagesFromEvent(eventId);
     }
 
-    @ApiMethod(name = "attendEvent", path = "event/attend", httpMethod = HttpMethod.GET)
+    @ApiMethod(name = "attendEvent", path = "events/attendants", httpMethod = HttpMethod.PUT)
     public void attendEvent(@Named("eventId") String eventId, @Named("userId") String userId) throws NotFoundException {
-        eventService.attendEvent(eventId, null);
-    }
-    
-    @ApiMethod(name = "createUser", path = "users/createUser", httpMethod = HttpMethod.POST)
-    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException{
-		return userService.createUser(username, password, bio, passions);
-    }
-    
-    @ApiMethod(name = "validateUser", path = "users/validateUser", httpMethod = HttpMethod.POST)
-    public ResultMessage validateUser (@Named("username") String username, @Named("password") String password) throws NotFoundException{
-    	return userService.validateUser(username, password);
-    }
-    
-    @ApiMethod(name = "getUser", path = "users/getUser", httpMethod = HttpMethod.POST)
-    public UserEntity getUser (@Named("username") String username) throws NotFoundException{
-    	return userService.getUser(username);
+        eventService.attendEvent(eventId, userService.getUserById(userId));
     }
 
-    @ApiMethod(name = "removeAttendance", path = "event/unAttend", httpMethod = HttpMethod.GET)
+    @ApiMethod(name = "removeAttendance", path = "events/attendants", httpMethod = HttpMethod.DELETE)
     public void removeAttendance(@Named("eventId") String eventId, @Named("userId") String userId)
             throws NotFoundException {
-        eventService.removeAttendance(eventId, null);
+        eventService.removeAttendance(eventId, userService.getUserById(userId));
     }
 
+    @ApiMethod(name = "createUser", path = "users/createUser", httpMethod = HttpMethod.POST)
+    public ResultMessage createFser(@Named("username") String username, @Named("password") String password,
+            @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException {
+        return userService.createUser(username, password, bio, passions);
+    }
+
+    @ApiMethod(name = "validateUser", path = "users/validateUser", httpMethod = HttpMethod.POST)
+    public ResultMessage validateUser(@Named("username") String username, @Named("password") String password)
+            throws NotFoundException {
+        return userService.validateUser(username, password);
+    }
+
+    @ApiMethod(name = "getUser", path = "users/getUser", httpMethod = HttpMethod.POST)
+    public UserEntity getUser(@Named("username") String username) throws NotFoundException {
+        return userService.getUser(username);
+    }
 }

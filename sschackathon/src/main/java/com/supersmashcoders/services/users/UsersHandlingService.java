@@ -3,72 +3,87 @@ package com.supersmashcoders.services.users;
 import java.util.List;
 
 import com.google.api.server.spi.config.Named;
-import com.google.api.server.spi.response.NotFoundException;
 import com.google.api.server.spi.response.ConflictException;
+import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.googlecode.objectify.ObjectifyService;
 import com.supersmashcoders.entities.UserEntity;
 import com.supersmashcoders.pojos.ResultMessage;
 
 public class UsersHandlingService {
-	
-    public ResultMessage createUser (@Named("username") String username, @Named("password") String password, @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException{
-		UserEntity user;
-		
-		
-    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username);
-    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
-    											.prepare(query)
-    											.asList(FetchOptions.Builder.withDefaults());
-    	System.out.println(entities.size());
-    	
-    	if (entities.size() == 0){
-    		user = new UserEntity(username, password, bio, passions);
-    		ObjectifyService.ofy().save().entity(user).now();
-    	}
-    	else {
-    		throw new ConflictException("Username " + username + " already exists!");
-    	}
-    	
+
+    public ResultMessage createUser(@Named("username") String username, @Named("password") String password,
+            @Named("bio") String bio, @Named("passions") List<String> passions) throws ConflictException {
+        UserEntity user = null;
+        Filter usernameFilter = new FilterPredicate("username", FilterOperator.EQUAL, username);
+        Query query = new Query("UserEntity").setFilter(usernameFilter);
+        List<Entity> entities = DatastoreServiceFactory.getDatastoreService().prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
+        System.out.println(entities.size());
+
+        if (entities.size() == 0) {
+            user = new UserEntity(username, password, bio, passions);
+            ObjectifyService.ofy().save().entity(user).now();
+        } else {
+            throw new ConflictException("Username " + username + " already exists!");
+        }
+
         return new ResultMessage("Success", Long.toString(user.getId()));
     }
-    
-    public ResultMessage validateUser (@Named("username") String username, @Named("password") String password) throws NotFoundException{
-    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username)
-    			.addFilter("password", Query.FilterOperator.EQUAL, password);
-    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
-    											.prepare(query)
-    											.asList(FetchOptions.Builder.withDefaults());
-    	System.out.println(entities.size());
-    	
-    	UserEntity user = null;
-    	if (entities.size() == 1){
-    		user = (UserEntity)ObjectifyService.ofy().toPojo(entities.get(0));
-    	}
-    	else {
-    		throw new NotFoundException("No user/password combination exists with username " + username);
-    	}
-    	return new ResultMessage("Success", Long.toString(user.getId()));
+
+    public ResultMessage validateUser(@Named("username") String username, @Named("password") String password)
+            throws NotFoundException {
+        Filter usernameFilter = new FilterPredicate("username", FilterOperator.EQUAL, username);
+        Filter passwordFilter = new FilterPredicate("password", FilterOperator.EQUAL, password);
+        Query query = new Query("UserEntity").setFilter(usernameFilter).setFilter(passwordFilter);
+
+        List<Entity> entities = DatastoreServiceFactory.getDatastoreService().prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
+        System.out.println(entities.size());
+
+        UserEntity user = null;
+        if (entities.size() == 1) {
+            user = (UserEntity) ObjectifyService.ofy().toPojo(entities.get(0));
+        } else {
+            throw new NotFoundException("No user/password combination exists with username " + username);
+        }
+        return new ResultMessage("Success", Long.toString(user.getId()));
     }
-    
-    public UserEntity getUser (@Named("username") String username) throws NotFoundException{
-    	Query query = new Query("UserEntity").addFilter("username", Query.FilterOperator.EQUAL, username);
-    	List<Entity> entities = DatastoreServiceFactory.getDatastoreService()
-    											.prepare(query)
-    											.asList(FetchOptions.Builder.withDefaults());
-    	System.out.println(entities.size());
-    	UserEntity user;
-    	if (entities.size() == 1){
-    		user = (UserEntity)ObjectifyService.ofy().toPojo(entities.get(0));
-    		user.setPassword("");
-    	}
-    	else {
-    		throw new NotFoundException("No user exists with username " + username);
-    	}
-    	return user;
-    	
+
+    public UserEntity getUser(@Named("username") String username) throws NotFoundException {
+        Filter usernameFilter = new FilterPredicate("username", FilterOperator.EQUAL, username);
+        Query query = new Query("UserEntity").setFilter(usernameFilter);
+        List<Entity> entities = DatastoreServiceFactory.getDatastoreService().prepare(query)
+                .asList(FetchOptions.Builder.withDefaults());
+        System.out.println(entities.size());
+        UserEntity user;
+        if (entities.size() == 1) {
+            user = (UserEntity) ObjectifyService.ofy().toPojo(entities.get(0));
+            user.setPassword("");
+        } else {
+            throw new NotFoundException("No user exists with username " + username);
+        }
+        return user;
+    }
+
+    public UserEntity getUserById(String id) throws NotFoundException {
+        Key key = KeyFactory.createKey("UserEntity", Long.decode(id));
+        Entity entity = null;
+        try {
+            entity = DatastoreServiceFactory.getDatastoreService().get(key);
+            UserEntity user = ObjectifyService.ofy().toPojo(entity);
+            return user;
+        } catch (EntityNotFoundException e) {
+            throw new NotFoundException("No users exists with id " + id);
+        }
     }
 }

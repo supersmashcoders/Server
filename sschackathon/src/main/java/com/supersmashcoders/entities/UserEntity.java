@@ -50,7 +50,8 @@ public class UserEntity {
 	public String getUsername() {
 		return username;
 	}
-	public UserEntity (String username, String password, String bio, List<String> passions) {
+
+    public UserEntity (String username, String password, String bio, List<String> passions) {
 		this.username = username;
 		this.password = password;
 		this.bio = bio;

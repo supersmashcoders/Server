@@ -54,13 +54,19 @@ public class EventService {
 
     @ApiMethod(name = "attendEvent", path = "events/attendants", httpMethod = HttpMethod.PUT)
     public void attendEvent(@Named("eventId") String eventId, @Named("userId") String userId) throws NotFoundException {
-        eventService.attendEvent(eventId, userService.getUserById(userId));
+        EventEntity event = getEvent(eventId);
+        UserEntity user = userService.getUserById(userId);
+        eventService.attendEvent(event, user);
+        userService.attendEvent(event, user);
     }
 
     @ApiMethod(name = "removeAttendance", path = "events/attendants", httpMethod = HttpMethod.DELETE)
     public void removeAttendance(@Named("eventId") String eventId, @Named("userId") String userId)
             throws NotFoundException {
-        eventService.removeAttendance(eventId, userService.getUserById(userId));
+        EventEntity event = getEvent(eventId);
+        UserEntity user = userService.getUserById(userId);
+        eventService.removeAttendance(event, user);
+        userService.removeAttendance(event, user);
     }
 
     @ApiMethod(name = "createUser", path = "users/createUser", httpMethod = HttpMethod.POST)

@@ -16,6 +16,7 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.googlecode.objectify.ObjectifyService;
+import com.supersmashcoders.entities.EventEntity;
 import com.supersmashcoders.entities.UserEntity;
 import com.supersmashcoders.pojos.ResultMessage;
 
@@ -85,5 +86,15 @@ public class UsersHandlingService {
         } catch (EntityNotFoundException e) {
             throw new NotFoundException("No users exists with id " + id);
         }
+    }
+
+    public void attendEvent(EventEntity eventEntity, UserEntity userEntity) throws NotFoundException {
+        userEntity.attendEvent(eventEntity);
+        ObjectifyService.ofy().save().entity(userEntity).now();
+    }
+
+    public void removeAttendance(EventEntity eventEntity, UserEntity userEntity) throws NotFoundException {
+        userEntity.removeAttendant(eventEntity);
+        ObjectifyService.ofy().save().entity(userEntity).now();
     }
 }

@@ -46,14 +46,12 @@ public class EventsHandlingService {
         return events;
     }
 
-    public void attendEvent(String eventId, UserEntity userEntity) throws NotFoundException {
-        EventEntity eventEntity = this.getEvent(eventId);
+    public void attendEvent(EventEntity eventEntity, UserEntity userEntity) throws NotFoundException {
         eventEntity.addAttendant(userEntity);
         ObjectifyService.ofy().save().entity(eventEntity).now();
     }
 
-    public void removeAttendance(String eventId, UserEntity userEntity) throws NotFoundException {
-        EventEntity eventEntity = this.getEvent(eventId);
+    public void removeAttendance(EventEntity eventEntity, UserEntity userEntity) throws NotFoundException {
         eventEntity.removeAttendant(userEntity);
         ObjectifyService.ofy().save().entity(eventEntity).now();
     }
